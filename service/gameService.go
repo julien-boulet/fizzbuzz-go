@@ -6,35 +6,31 @@ import (
 )
 
 func FizzBuzz(gameParameter dto.GameParamater) []string {
-	result := make([]string, gameParameter.Limit)
-	i := 0
-	for out := range run(gameParameter) {
-		result[i] = out
-		i++
+	out := make(chan string, gameParameter.Limit)
+	result := make([]string, 0, gameParameter.Limit)
+
+	go run(gameParameter, out)
+
+	for value := range out {
+		result = append(result, value)
 	}
+
 	return result
 }
 
-func run(gameParameter dto.GameParamater) <-chan string {
-
-	out := make(chan string, gameParameter.Limit)
-
-	go func() {
-		for i := 1; i <= gameParameter.Limit; i++ {
-			result := ""
-			if i%gameParameter.Int1 == 0 {
-				result += gameParameter.Str1
-			}
-			if i%gameParameter.Int2 == 0 {
-				result += gameParameter.Str2
-			}
-			if result == "" {
-				result = fmt.Sprintf("%v", i)
-			}
-			out <- result
+func run(gameParameter dto.GameParamater, out chan string) {
+	for i := 1; i <= gameParameter.Limit; i++ {
+		result := ""
+		if i%gameParameter.Int1 == 0 {
+			result += gameParameter.Str1
 		}
-		close(out)
-	}()
-
-	return out
+		if i%gameParameter.Int2 == 0 {
+			result += gameParameter.Str2
+		}
+		if result == "" {
+			result = fmt.Sprintf("%v", i)
+		}
+		out <- result
+	}
+	close(out)
 }
