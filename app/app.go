@@ -1,6 +1,7 @@
 package app
 
 import (
+	"database/sql"
 	"encoding/json"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/schema"
@@ -11,8 +12,9 @@ import (
 )
 
 type App struct {
-	Router  *mux.Router
-	Decoder *schema.Decoder
+	Router   *mux.Router
+	Decoder  *schema.Decoder
+	Database *sql.DB
 }
 
 func (app *App) SetupRouter() {
@@ -35,6 +37,7 @@ func (app *App) getFunction(w http.ResponseWriter, r *http.Request) {
 	}
 
 	result := service.FizzBuzz(gameParameter)
+	service.Save(app.Database, gameParameter)
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(result)
