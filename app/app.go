@@ -25,7 +25,7 @@ func (app *App) SetupRouter() {
 
 func (app *App) getFunction(w http.ResponseWriter, r *http.Request) {
 
-	var gameParameter dto.GameParamater
+	var gameParameter dto.GameParameter
 
 	err := app.Decoder.Decode(&gameParameter, r.URL.Query())
 	if err != nil {

@@ -1,6 +1,6 @@
 package dto
 
-type GameParamater struct {
+type GameParameter struct {
 	Int1  int    `schema:"int1"`
 	Int2  int    `schema:"int2"`
 	Limit int    `schema:"limit"`
