@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/gorilla/schema"
 	"log"
 	"net/http"
 
@@ -11,7 +12,8 @@ import (
 func main() {
 
 	app := &app.App{
-		Router: mux.NewRouter().StrictSlash(true),
+		Router:  mux.NewRouter().StrictSlash(true),
+		Decoder: schema.NewDecoder(),
 	}
 
 	app.SetupRouter()

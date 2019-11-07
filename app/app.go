@@ -10,10 +10,9 @@ import (
 	"net/http"
 )
 
-var decoder = schema.NewDecoder()
-
 type App struct {
-	Router *mux.Router
+	Router  *mux.Router
+	Decoder *schema.Decoder
 }
 
 func (app *App) SetupRouter() {
@@ -28,19 +27,14 @@ func (app *App) getFunction(w http.ResponseWriter, r *http.Request) {
 
 	var gameParameter dto.GameParamater
 
-	err := decoder.Decode(&gameParameter, r.URL.Query())
+	err := app.Decoder.Decode(&gameParameter, r.URL.Query())
 	if err != nil {
 		log.Println("Error in GET parameters : ", err)
 	} else {
 		log.Println("GET parameters : ", gameParameter)
 	}
 
-	result := make([]string, gameParameter.Limit)
-	i := 0
-	for out := range service.FizzBuzz(gameParameter) {
-		result[i] = out
-		i += 1
-	}
+	result := service.FizzBuzz(gameParameter)
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(result)
