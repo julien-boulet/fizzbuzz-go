@@ -3,6 +3,7 @@ package app
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/schema"
 	"github.com/jboulet/fizzbuzz-go/dto"
@@ -32,20 +33,16 @@ func (app *App) SetupRouter() {
 
 func (app *App) playFizzBuzz(w http.ResponseWriter, r *http.Request) {
 
-	var gameParameter dto.GameParameter
-
+	gameParameter := dto.GameParameter{}
 	err := app.Decoder.Decode(&gameParameter, r.URL.Query())
 	if err != nil {
-		log.Println("Error in GET parameters : ", err)
-	} else {
-		log.Println("GET parameters : ", gameParameter)
+		log.Fatal("Error in GET parameters : ", err)
 	}
 
-	result := service.FizzBuzz(&gameParameter)
+	for value := range service.FizzBuzz(&gameParameter) {
+		fmt.Fprintln(w, value)
+	}
 	service.Save(app.Database, &gameParameter)
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(result)
 }
 
 func (app *App) oneTopStatistic(w http.ResponseWriter, r *http.Request) {
