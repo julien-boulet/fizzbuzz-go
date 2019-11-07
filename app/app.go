@@ -22,10 +22,15 @@ func (app *App) SetupRouter() {
 		Methods("GET").
 		Queries("int1", "{int1:[0-9]+}", "int2", "{int2:[0-9]+}", "limit", "{limit:[0-9]+}", "str1", "{str1:[A-Za-z]+}", "str2", "{str2:[A-Za-z]+}").
 		Path("/fizzbuzz").
-		HandlerFunc(app.getFunction)
+		HandlerFunc(app.playFizzBuzz)
+
+	app.Router.
+		Methods("GET").
+		Path("/oneTopStatistic").
+		HandlerFunc(app.oneTopStatistic)
 }
 
-func (app *App) getFunction(w http.ResponseWriter, r *http.Request) {
+func (app *App) playFizzBuzz(w http.ResponseWriter, r *http.Request) {
 
 	var gameParameter dto.GameParameter
 
@@ -38,6 +43,13 @@ func (app *App) getFunction(w http.ResponseWriter, r *http.Request) {
 
 	result := service.FizzBuzz(gameParameter)
 	service.Save(app.Database, gameParameter)
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(result)
+}
+
+func (app *App) oneTopStatistic(w http.ResponseWriter, r *http.Request) {
+	result := service.FindMax(app.Database)
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(result)
