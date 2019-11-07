@@ -41,8 +41,8 @@ func (app *App) playFizzBuzz(w http.ResponseWriter, r *http.Request) {
 		log.Println("GET parameters : ", gameParameter)
 	}
 
-	result := service.FizzBuzz(gameParameter)
-	service.Save(app.Database, gameParameter)
+	result := service.FizzBuzz(&gameParameter)
+	service.Save(app.Database, &gameParameter)
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(result)

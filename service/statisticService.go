@@ -13,7 +13,7 @@ const (
 	TOP    = "SELECT int1, int2, lim, str1, str2, count FROM statistic ORDER BY count DESC LIMIT 1;"
 )
 
-func Save(database *sql.DB, gameParameter dto.GameParameter) {
+func Save(database *sql.DB, gameParameter *dto.GameParameter) {
 
 	var exists bool
 	err := database.QueryRow(EXISTS, gameParameter.Int1, gameParameter.Int2, gameParameter.Limit, gameParameter.Str1, gameParameter.Str2).Scan(&exists)
@@ -33,11 +33,11 @@ func Save(database *sql.DB, gameParameter dto.GameParameter) {
 	}
 }
 
-func FindMax(database *sql.DB) dto.StatisticResult {
+func FindMax(database *sql.DB) *dto.StatisticResult {
 	statisticResult := dto.StatisticResult{}
 	err := database.QueryRow(TOP).Scan(&statisticResult.Int1, &statisticResult.Int2, &statisticResult.Limit, &statisticResult.Str1, &statisticResult.Str2, &statisticResult.Count)
 	if err != nil {
 		log.Fatal("Error checking top result : ", err)
 	}
-	return statisticResult
+	return &statisticResult
 }

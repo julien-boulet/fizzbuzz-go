@@ -5,7 +5,7 @@ import (
 	"github.com/jboulet/fizzbuzz-go/dto"
 )
 
-func FizzBuzz(gameParameter dto.GameParameter) []string {
+func FizzBuzz(gameParameter *dto.GameParameter) *[]string {
 	out := make(chan string, gameParameter.Limit)
 	result := make([]string, 0, gameParameter.Limit)
 
@@ -15,10 +15,10 @@ func FizzBuzz(gameParameter dto.GameParameter) []string {
 		result = append(result, value)
 	}
 
-	return result
+	return &result
 }
 
-func run(gameParameter dto.GameParameter, out chan string) {
+func run(gameParameter *dto.GameParameter, out chan string) {
 	for i := 1; i <= gameParameter.Limit; i++ {
 		result := ""
 		if i%gameParameter.Int1 == 0 {
