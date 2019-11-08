@@ -6,8 +6,9 @@ create table statistic
     count integer,
     int1  integer,
     int2  integer,
-    lim   integer constraint statistic_lim_check check (lim >= 1),
+    lim   integer
+        constraint statistic_lim_check check (lim >= 1),
     str1  varchar(255),
     str2  varchar(255),
-    CONSTRAINT id_tbl PRIMARY KEY ( id )
+    CONSTRAINT id_tbl PRIMARY KEY (id)
 );

@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gorilla/schema"
+	"github.com/jboulet/fizzbuzz-go/utils"
 	"log"
 	"net/http"
 
@@ -24,5 +25,6 @@ func main() {
 
 	app.SetupRouter()
 
-	log.Fatal(http.ListenAndServe(":8080", app.Router))
+	port := utils.EnvVariable("SERVER_PORT", utils.ServerPort)
+	log.Fatal(http.ListenAndServe(":"+port, app.Router))
 }
