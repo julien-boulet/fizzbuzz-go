@@ -1,8 +1,11 @@
 package utils
 
-import "os"
+import (
+	"log"
+	"os"
+)
 
-const (
+var (
 	Host       = "localhost"
 	Port       = "5432"
 	User       = "postgres"
@@ -11,11 +14,20 @@ const (
 	ServerPort = "8080"
 )
 
-func EnvVariable(key string, defaultValue string) string {
-	dbHost := defaultValue
+func UpdateEnv() {
+	update("SERVER_PORT", &ServerPort)
+	update("BD_HOST", &Host)
+	update("DB_PORT", &Port)
+	update("DB_USERNAME", &User)
+	update("DB_PASSWORD", &Password)
+	update("DB_NAME", &DBName)
+
+	log.Println("BD_HOST : ", Host)
+}
+
+func update(key string, defaultValue *string) {
 	value, ok := os.LookupEnv(key)
 	if ok {
-		dbHost = value
+		*defaultValue = value
 	}
-	return dbHost
 }
