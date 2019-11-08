@@ -48,7 +48,7 @@ func migrateDatabase(db *sql.DB) error {
 
 	migration, err := migrate.NewWithDatabaseInstance(
 		fmt.Sprintf("file://%s/db/migrations", dir),
-		"mysql",
+		"postgres",
 		driver,
 	)
 	if err != nil {
