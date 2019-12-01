@@ -12,6 +12,8 @@ var (
 	Password   = "postgres"
 	DBName     = "postgres"
 	ServerPort = "8080"
+	BSServers  = "localhost:9095,localhost:9093,localhost:9094"
+	Topic      = "myTopic"
 )
 
 func UpdateEnv() {
@@ -21,6 +23,8 @@ func UpdateEnv() {
 	update("DB_USERNAME", &User)
 	update("DB_PASSWORD", &Password)
 	update("DB_NAME", &DBName)
+	update("BS_SERVER", &BSServers)
+	update("TOPIC", &Topic)
 
 	log.Println("BD_HOST : ", Host)
 }
