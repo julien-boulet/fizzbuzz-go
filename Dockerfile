@@ -48,6 +48,9 @@ RUN /root/librdkafka/configure --install-deps
 RUN make
 RUN make install
 
+## Dont work ...
+#RUN apk add --update --no-cache librdkafka-dev pkgconf
+
 WORKDIR /root/
 
 # Expose port 8080 to the outside world
