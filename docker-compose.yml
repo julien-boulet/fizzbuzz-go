@@ -20,7 +20,7 @@ services:
       DB_PASSWORD: postgres
       DB_NAME: postgres
       BS_SERVER: kafka-1:29092
-      TOPIC: toto
+      TOPIC: topic
     ports:
       - "8083:8080"
     depends_on:
