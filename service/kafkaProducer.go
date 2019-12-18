@@ -3,8 +3,8 @@ package service
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/jboulet/fizzbuzz-go/config"
 	"github.com/jboulet/fizzbuzz-go/dto"
-	"github.com/jboulet/fizzbuzz-go/utils"
 	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
 	"log"
 )
@@ -32,5 +32,5 @@ func PushtoKafka(producer *kafka.Producer, gameParameter *dto.GameParameter) {
 	}()
 
 	// Produce messages to topic (asynchronously)
-	producer.Produce(&kafka.Message{TopicPartition: kafka.TopicPartition{Topic: &utils.Topic, Partition: kafka.PartitionAny}, Value: gameParameterJson}, nil)
+	producer.Produce(&kafka.Message{TopicPartition: kafka.TopicPartition{Topic: &config.S.TOPIC, Partition: kafka.PartitionAny}, Value: gameParameterJson}, nil)
 }

@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/jboulet/fizzbuzz-go/utils"
+	"github.com/jboulet/fizzbuzz-go/config"
 
 	"github.com/golang-migrate/migrate"
 	"github.com/golang-migrate/migrate/database/postgres"
@@ -17,7 +17,7 @@ import (
 func CreateDatabase() (*sql.DB, error) {
 
 	connectionString := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-		utils.Host, utils.Port, utils.User, utils.Password, utils.DBName)
+		config.S.BD_HOST, config.S.DB_PORT, config.S.DB_USERNAME, config.S.DB_PASSWORD, config.S.DB_NAME)
 
 	db, err := sql.Open("postgres", connectionString)
 	if err != nil {
