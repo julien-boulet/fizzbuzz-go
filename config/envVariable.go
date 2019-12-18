@@ -16,13 +16,17 @@ type Specification struct {
 	TOPIC       string `default:"myTopic"`
 }
 
-var S Specification
+var s Specification
 
 func UpdateEnv() {
-	err := envconfig.Process("", &S)
+	err := envconfig.Process("", &s)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 
-	log.Printf("Specification : ", S)
+	log.Printf("Specification : ", s)
+}
+
+func GetSpecification() *Specification {
+	return &s
 }

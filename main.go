@@ -14,12 +14,14 @@ import (
 func main() {
 	config.UpdateEnv()
 
+	s := config.GetSpecification()
+
 	database, err := db.CreateDatabase()
 	if err != nil {
 		log.Fatal("Database connection failed: ", err.Error())
 	}
 
-	producer, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": config.S.BS_SERVER})
+	producer, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": s.BS_SERVER})
 	if err != nil {
 		panic(err)
 	}
@@ -34,5 +36,5 @@ func main() {
 
 	app.SetupRouter()
 
-	log.Fatal(http.ListenAndServe(":"+config.S.SERVER_PORT, app.Router))
+	log.Fatal(http.ListenAndServe(":"+s.SERVER_PORT, app.Router))
 }

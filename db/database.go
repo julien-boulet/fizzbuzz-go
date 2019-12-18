@@ -16,8 +16,10 @@ import (
 
 func CreateDatabase() (*sql.DB, error) {
 
+	s := config.GetSpecification()
+
 	connectionString := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-		config.S.BD_HOST, config.S.DB_PORT, config.S.DB_USERNAME, config.S.DB_PASSWORD, config.S.DB_NAME)
+		s.BD_HOST, s.DB_PORT, s.DB_USERNAME, s.DB_PASSWORD, s.DB_NAME)
 
 	db, err := sql.Open("postgres", connectionString)
 	if err != nil {

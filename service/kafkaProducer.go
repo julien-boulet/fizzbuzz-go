@@ -32,5 +32,5 @@ func PushtoKafka(producer *kafka.Producer, gameParameter *dto.GameParameter) {
 	}()
 
 	// Produce messages to topic (asynchronously)
-	producer.Produce(&kafka.Message{TopicPartition: kafka.TopicPartition{Topic: &config.S.TOPIC, Partition: kafka.PartitionAny}, Value: gameParameterJson}, nil)
+	producer.Produce(&kafka.Message{TopicPartition: kafka.TopicPartition{Topic: &config.GetSpecification().TOPIC, Partition: kafka.PartitionAny}, Value: gameParameterJson}, nil)
 }
