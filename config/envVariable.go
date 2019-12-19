@@ -21,7 +21,7 @@ var s Specification
 func UpdateEnv() {
 	err := envconfig.Process("", &s)
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Fatal("Env variables loading failed: ", err.Error())
 	}
 
 	log.Printf("Specification : ", s)
