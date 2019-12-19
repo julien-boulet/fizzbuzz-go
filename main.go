@@ -23,7 +23,7 @@ func main() {
 
 	producer, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": s.BS_SERVER})
 	if err != nil {
-		panic(err)
+		log.Fatal("Kafka producer connection failed: ", err.Error())
 	}
 	defer producer.Close()
 
