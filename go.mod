@@ -16,5 +16,4 @@ require (
 	github.com/opencontainers/go-digest v1.0.0-rc1 // indirect
 	github.com/stretchr/testify v1.4.0 // indirect
 	golang.org/x/net v0.0.0-20191109021931-daa7c04131f5 // indirect
-	gopkg.in/confluentinc/confluent-kafka-go.v1 v1.1.0
 )
