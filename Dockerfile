@@ -1,14 +1,8 @@
 # Start from the latest golang base image
 FROM golang:alpine as builder
 
-# Installing librdkafka for build : https://github.com/confluentinc/confluent-kafka-go/#getting-started
-RUN apk add --update --no-cache alpine-sdk bash python ca-certificates libressl tar git openssh openssl yajl-dev zlib-dev cyrus-sasl-dev openssl-dev build-base coreutils
-WORKDIR /app
-RUN git clone https://github.com/edenhill/librdkafka.git
-WORKDIR /app/librdkafka
-RUN /app/librdkafka/configure --install-deps
-RUN make
-RUN make install
+# Installing librdkafka
+RUN apk add --update --no-cache alpine-sdk bash python ca-certificates libressl tar git openssh openssl yajl-dev zlib-dev cyrus-sasl-dev openssl-dev build-base coreutils librdkafka-dev pkgconf
 
 # Set the Current Working Directory inside the container
 WORKDIR /app
@@ -40,16 +34,7 @@ COPY --from=builder /app/main .
 COPY --from=builder /app/db/migrations ./db/migrations
 
 # Re-Installing librdkafka for execution
-RUN apk add --update --no-cache alpine-sdk bash python ca-certificates libressl tar git openssh openssl yajl-dev zlib-dev cyrus-sasl-dev openssl-dev build-base coreutils
-WORKDIR /root
-RUN git clone https://github.com/edenhill/librdkafka.git
-WORKDIR /root/librdkafka
-RUN /root/librdkafka/configure --install-deps
-RUN make
-RUN make install
-
-## Dont work without alpine:edge ...
-#RUN apk add --update --no-cache librdkafka-dev pkgconf
+RUN apk add --update --no-cache librdkafka-dev pkgconf
 
 WORKDIR /root/
 
