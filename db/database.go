@@ -6,21 +6,13 @@ import (
 	"log"
 	"os"
 
-	"github.com/jboulet/fizzbuzz-go/config"
-
 	"github.com/golang-migrate/migrate"
 	"github.com/golang-migrate/migrate/database/postgres"
 	_ "github.com/golang-migrate/migrate/source/file"
 	_ "github.com/lib/pq"
 )
 
-func CreateDatabase() (*sql.DB, error) {
-
-	s := config.GetSpecification()
-
-	connectionString := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-		s.BD_HOST, s.DB_PORT, s.DB_USERNAME, s.DB_PASSWORD, s.DB_NAME)
-
+func CreateDatabase(connectionString string) (*sql.DB, error) {
 	db, err := sql.Open("postgres", connectionString)
 	if err != nil {
 		return nil, err
