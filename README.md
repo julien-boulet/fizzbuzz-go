@@ -11,8 +11,14 @@ https://github.com/gorilla/csrf
 #update import
 go list -m -u all
 
+#Install all dependencies
+go get -d -v ./...
+
 #run all tests
 go test $(go list ./... | grep -v /vendor/)
+
+#swagger
+https://github.com/swaggo/http-swagger
 
 
 #test application
