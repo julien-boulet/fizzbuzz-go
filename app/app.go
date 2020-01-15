@@ -6,8 +6,10 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/schema"
+	_ "github.com/jboulet/fizzbuzz-go/docs"
 	"github.com/jboulet/fizzbuzz-go/dto"
 	"github.com/jboulet/fizzbuzz-go/service"
+	"github.com/swaggo/http-swagger"
 	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
 	"log"
 	"net/http"
@@ -31,8 +33,31 @@ func (app *App) SetupRouter() {
 		Methods("GET").
 		Path("/oneTopStatistic").
 		HandlerFunc(app.oneTopStatistic)
+
+	app.Router.
+		Methods("GET").
+		Path("/docs/swagger.json").
+		HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			http.ServeFile(w, r, "docs/swagger.json")
+		})
+
+	// Swagger
+	app.Router.
+		PathPrefix("/swagger").Handler(httpSwagger.WrapHandler)
 }
 
+// @Summary play fizzbuzz game
+// @Description play fizzbuzz game with specifics params
+// @ID fizz-buzz-game
+// @Accept  json
+// @Produce  json
+// @Param int1 query int true "first int for game"
+// @Param int2 query int true "second for game"
+// @Param limit query int true "limit of calculation"
+// @Param str1 query string true "first word for game"
+// @Param str2  query string true "second word for game"
+// @Success 200 {string} string "One calculation"
+// @Router /fizzbuzz [get]
 func (app *App) playFizzBuzz(w http.ResponseWriter, r *http.Request) {
 
 	gameParameter := dto.GameParameter{}
@@ -47,6 +72,13 @@ func (app *App) playFizzBuzz(w http.ResponseWriter, r *http.Request) {
 	service.PushtoKafka(app.Producer, &gameParameter)
 }
 
+// @Summary ask the best statistics
+// @Description return the params most used to play
+// @ID fizz-buzz-statistic
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} dto.StatisticResult
+// @Router /oneTopStatistic [get]
 func (app *App) oneTopStatistic(w http.ResponseWriter, r *http.Request) {
 	result := service.FindMax(app.Database)
 

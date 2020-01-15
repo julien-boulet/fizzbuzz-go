@@ -19,6 +19,8 @@ COPY . .
 # Build the Go app
 RUN CGO_ENABLED=true GOOS=linux go build -a -installsuffix cgo -o main .
 
+RUN go get github.com/swaggo/swag/cmd/swag
+RUN swag init
 
 ######## Start a new stage from scratch #######
 FROM alpine:latest
@@ -29,6 +31,9 @@ WORKDIR /root/
 
 # Copy the Pre-built binary file from the previous stage
 COPY --from=builder /app/main .
+
+# Copy swagger docs
+COPY --from=builder /app/docs ./docs
 
 # Copy db migrations file
 COPY --from=builder /app/db/migrations ./db/migrations

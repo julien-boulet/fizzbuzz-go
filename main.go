@@ -23,6 +23,12 @@ func init() {
 	log.Printf("Specification : %v", *s)
 }
 
+// @title FizzBuzz Go API
+// @version 1.0
+// @description This is a simple API that plays the fizzbuzz game and store statistics.
+
+// @schemes http
+// @BasePath /
 func main() {
 	s := config.GetSpecification()
 
