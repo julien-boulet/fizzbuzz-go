@@ -1,10 +1,5 @@
 package config
 
-import (
-	"github.com/kelseyhightower/envconfig"
-	"log"
-)
-
 type Specification struct {
 	BD_HOST     string `default:"localhost"`
 	DB_PORT     string `default:"5432"`
@@ -17,15 +12,6 @@ type Specification struct {
 }
 
 var s Specification
-
-func UpdateEnv() {
-	err := envconfig.Process("", &s)
-	if err != nil {
-		log.Fatal("Env variables loading failed: ", err.Error())
-	}
-
-	log.Printf("Specification : ", s)
-}
 
 func GetSpecification() *Specification {
 	return &s

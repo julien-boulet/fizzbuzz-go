@@ -36,8 +36,7 @@ func (app *App) SetupRouter() {
 func (app *App) playFizzBuzz(w http.ResponseWriter, r *http.Request) {
 
 	gameParameter := dto.GameParameter{}
-	err := app.Decoder.Decode(&gameParameter, r.URL.Query())
-	if err != nil {
+	if err := app.Decoder.Decode(&gameParameter, r.URL.Query()); err != nil {
 		log.Fatal("Error in GET parameters : ", err)
 	}
 
