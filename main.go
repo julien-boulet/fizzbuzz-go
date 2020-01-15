@@ -5,6 +5,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/gorilla/schema"
 	"github.com/jboulet/fizzbuzz-go/app"
+	"github.com/jboulet/fizzbuzz-go/config"
 	"github.com/jboulet/fizzbuzz-go/db"
 	"github.com/kelseyhightower/envconfig"
 	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
@@ -23,6 +24,7 @@ func init() {
 }
 
 func main() {
+	s := config.GetSpecification()
 
 	database, err := db.CreateDatabase(fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", s.BD_HOST, s.DB_PORT, s.DB_USERNAME, s.DB_PASSWORD, s.DB_NAME))
 	if err != nil {
