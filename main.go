@@ -16,11 +16,11 @@ import (
 func init() {
 	s := config.GetSpecification()
 
-	if err := envconfig.Process("", &s); err != nil {
+	if err := envconfig.Process("", s); err != nil {
 		log.Fatal("Env variables loading failed: ", err.Error())
 	}
 
-	log.Printf("Specification : %v", s)
+	log.Printf("Specification : %v", *s)
 }
 
 func main() {
