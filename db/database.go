@@ -49,8 +49,7 @@ func migrateDatabase(db *sql.DB) error {
 	migration.Log = &MigrationLogger{}
 
 	migration.Log.Printf("Applying database migrations")
-	err = migration.Up()
-	if err != nil && err != migrate.ErrNoChange {
+	if err = migration.Up(); err != nil && err != migrate.ErrNoChange {
 		return err
 	}
 
