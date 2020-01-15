@@ -2,7 +2,7 @@
 FROM golang:alpine as builder
 
 # Installing librdkafka
-RUN apk add --update --no-cache alpine-sdk bash python ca-certificates libressl tar git openssh openssl yajl-dev zlib-dev cyrus-sasl-dev openssl-dev build-base coreutils librdkafka-dev pkgconf
+RUN apk add --update --no-cache build-base librdkafka-dev
 
 # Set the Current Working Directory inside the container
 WORKDIR /app
@@ -34,7 +34,7 @@ COPY --from=builder /app/main .
 COPY --from=builder /app/db/migrations ./db/migrations
 
 # Re-Installing librdkafka for execution
-RUN apk add --update --no-cache librdkafka-dev pkgconf
+RUN apk add --update --no-cache librdkafka-dev
 
 WORKDIR /root/
 
