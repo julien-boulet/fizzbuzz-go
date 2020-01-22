@@ -2,7 +2,7 @@
 FROM golang:alpine as builder
 
 # Installing librdkafka
-RUN apk add --update --no-cache build-base librdkafka-dev
+RUN apk add --update --no-cache build-base git librdkafka-dev
 
 # Set the Current Working Directory inside the container
 WORKDIR /app
