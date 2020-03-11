@@ -134,3 +134,14 @@ services:
       - kafka-1
       - kafka-schema-registry
       - kafka-rest-proxy
+
+  kafka-manager:
+    image: kafkamanager/kafka-manager
+    hostname: kafka-manager
+    ports:
+      - "9003:9000"
+    environment:
+      ZK_HOSTS: "zookeeper:2181"
+    depends_on:
+      - zookeeper
+      - kafka-1
