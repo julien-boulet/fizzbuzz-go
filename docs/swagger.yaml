@@ -1,0 +1,81 @@
+basePath: /
+definitions:
+  dto.StatisticResult:
+    properties:
+      count:
+        type: integer
+      int1:
+        type: integer
+      int2:
+        type: integer
+      limit:
+        type: integer
+      str1:
+        type: string
+      str2:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: This is a simple API that plays the fizzbuzz game and store statistics.
+  license: {}
+  title: FizzBuzz Go API
+  version: "1.0"
+paths:
+  /fizzbuzz:
+    get:
+      consumes:
+      - application/json
+      description: play fizzbuzz game with specifics params
+      operationId: fizz-buzz-game
+      parameters:
+      - description: first int for game
+        in: query
+        name: int1
+        required: true
+        type: integer
+      - description: second for game
+        in: query
+        name: int2
+        required: true
+        type: integer
+      - description: limit of calculation
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: first word for game
+        in: query
+        name: str1
+        required: true
+        type: string
+      - description: second word for game
+        in: query
+        name: str2
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: One calculation
+          schema:
+            type: string
+      summary: play fizzbuzz game
+  /oneTopStatistic:
+    get:
+      consumes:
+      - application/json
+      description: return the params most used to play
+      operationId: fizz-buzz-statistic
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.StatisticResult'
+      summary: ask the best statistics
+schemes:
+- http
+swagger: "2.0"
