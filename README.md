@@ -25,3 +25,7 @@ https://github.com/swaggo/http-swagger
 
 GET --> localhost:8083/fizzbuzz?int1=3&int2=5&limit=16&str1=fizz&str2=buzz
 GET --> localhost:8083/oneTopStatistic
+
+#sagger :
+
+http://localhost:8083/swagger/index.html
