@@ -1,9 +1,6 @@
 # Start from the latest golang base image
 FROM golang:alpine as builder
 
-# Installing librdkafka
-RUN apk add --update --no-cache build-base git librdkafka-dev
-
 # Set the Current Working Directory inside the container
 WORKDIR /app
 
@@ -17,7 +14,7 @@ RUN go mod download
 COPY . .
 
 # Build the Go app
-RUN CGO_ENABLED=true GOOS=linux go build -a -installsuffix cgo -o main .
+RUN CGO_ENABLED=false GOOS=linux go build -o main .
 
 RUN go get github.com/swaggo/swag/cmd/swag
 RUN swag init
@@ -37,9 +34,6 @@ COPY --from=builder /app/docs ./docs
 
 # Copy db migrations file
 COPY --from=builder /app/db/migrations ./db/migrations
-
-# Re-Installing librdkafka for execution
-RUN apk add --update --no-cache librdkafka-dev
 
 WORKDIR /root/
 

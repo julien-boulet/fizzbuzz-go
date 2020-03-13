@@ -9,8 +9,8 @@ import (
 	_ "github.com/jboulet/fizzbuzz-go/docs"
 	"github.com/jboulet/fizzbuzz-go/dto"
 	"github.com/jboulet/fizzbuzz-go/service"
+	kafka "github.com/segmentio/kafka-go"
 	"github.com/swaggo/http-swagger"
-	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
 	"log"
 	"net/http"
 )
@@ -19,7 +19,7 @@ type App struct {
 	Router   *mux.Router
 	Decoder  *schema.Decoder
 	Database *sql.DB
-	Producer *kafka.Producer
+	Producer *kafka.Writer
 }
 
 func (app *App) SetupRouter() {
@@ -69,7 +69,7 @@ func (app *App) playFizzBuzz(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, value)
 	}
 	service.Save(app.Database, &gameParameter)
-	service.PushtoKafka(app.Producer, &gameParameter)
+	service.PushtoKafka(app.Producer, &gameParameter, r)
 }
 
 // @Summary ask the best statistics

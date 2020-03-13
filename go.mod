@@ -19,6 +19,7 @@ require (
 	github.com/lib/pq v1.2.0
 	github.com/mailru/easyjson v0.7.0 // indirect
 	github.com/opencontainers/go-digest v1.0.0-rc1 // indirect
+	github.com/segmentio/kafka-go v0.3.5
 	github.com/swaggo/http-swagger v0.0.0-20200103000832-0e9263c4b516
 	github.com/swaggo/swag v1.6.5
 	golang.org/x/net v0.0.0-20200114155413-6afb5195e5aa // indirect

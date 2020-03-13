@@ -8,7 +8,7 @@ import (
 	"github.com/jboulet/fizzbuzz-go/config"
 	"github.com/jboulet/fizzbuzz-go/db"
 	"github.com/kelseyhightower/envconfig"
-	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
+	kafka "github.com/segmentio/kafka-go"
 	"log"
 	"net/http"
 )
@@ -36,18 +36,20 @@ func main() {
 	if err != nil {
 		log.Fatal("Database connection failed: ", err.Error())
 	}
+	defer database.Close()
 
-	producer, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": s.BS_SERVER})
-	if err != nil {
-		log.Fatal("Kafka producer connection failed: ", err.Error())
-	}
-	defer producer.Close()
+	kafkaWriter := kafka.NewWriter(kafka.WriterConfig{
+		Brokers:  []string{s.BS_SERVER},
+		Topic:    s.TOPIC,
+		Balancer: &kafka.LeastBytes{},
+	})
+	defer kafkaWriter.Close()
 
 	app := &app.App{
 		Router:   mux.NewRouter().StrictSlash(true),
 		Decoder:  schema.NewDecoder(),
 		Database: database,
-		Producer: producer,
+		Producer: kafkaWriter,
 	}
 
 	app.SetupRouter()
