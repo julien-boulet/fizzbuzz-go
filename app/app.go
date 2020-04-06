@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	redis2 "github.com/go-redis/redis/v7"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/schema"
 	_ "github.com/jboulet/fizzbuzz-go/docs"
@@ -20,6 +21,7 @@ type App struct {
 	Decoder  *schema.Decoder
 	Database *sql.DB
 	Producer *kafka.Writer
+	Redis    *redis2.Client
 }
 
 func (app *App) SetupRouter() {
@@ -70,6 +72,7 @@ func (app *App) playFizzBuzz(w http.ResponseWriter, r *http.Request) {
 	}
 	service.Save(app.Database, &gameParameter)
 	service.PushtoKafka(app.Producer, &gameParameter, r)
+	service.PushtoRedis(app.Redis, &gameParameter, r)
 }
 
 // @Summary ask the best statistics

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/go-redis/redis/v7"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/schema"
 	"github.com/jboulet/fizzbuzz-go/app"
@@ -45,11 +46,18 @@ func main() {
 	})
 	defer kafkaWriter.Close()
 
+	redisClient := redis.NewClient(&redis.Options{
+		Addr:     s.REDIS_HOST,
+		Password: s.REDIS_PASSWORD, // no password set
+		DB:       s.REDIS_DB,       // use default DB
+	})
+
 	app := &app.App{
 		Router:   mux.NewRouter().StrictSlash(true),
 		Decoder:  schema.NewDecoder(),
 		Database: database,
 		Producer: kafkaWriter,
+		Redis:    redisClient,
 	}
 
 	app.SetupRouter()

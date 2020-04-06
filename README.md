@@ -9,13 +9,13 @@ https://phrase.com/blog/posts/internationalisation-in-go-with-go-i18n/
 https://github.com/gorilla/csrf
 
 #update import
-go list -m -u all
+```go list -m -u all```
 
 #Install all dependencies
-go get -d -v ./...
+```go get -d -v ./...```
 
 #run all tests
-go test $(go list ./... | grep -v /vendor/)
+```go test $(go list ./... | grep -v /vendor/)```
 
 #swagger
 https://github.com/swaggo/http-swagger
@@ -29,3 +29,17 @@ GET --> localhost:8083/oneTopStatistic
 #sagger :
 
 http://localhost:8083/swagger/index.html
+
+#redis :
+
+Connection to redis-cli :
+
+```docker exec -it fizzbuzz-go_Redis_1 redis-cli```
+
+Find all keys :
+
+```KEYS *```
+
+Find key value :
+
+```GET key```
