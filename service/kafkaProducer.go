@@ -9,7 +9,11 @@ import (
 	"net/http"
 )
 
-func PushtoKafka(producer *kafka.Writer, gameParameter *dto.GameParameter, req *http.Request) {
+type SaveKafkaService struct {
+	Client *kafka.Writer
+}
+
+func (s *SaveKafkaService) Push(gameParameter *dto.GameParameter, req *http.Request) {
 
 	gameParameterJson, err := json.Marshal(gameParameter)
 	if err != nil {
@@ -21,7 +25,7 @@ func PushtoKafka(producer *kafka.Writer, gameParameter *dto.GameParameter, req *
 		Key:   []byte(fmt.Sprintf("address-%s", req.RemoteAddr)),
 		Value: gameParameterJson,
 	}
-	if err := producer.WriteMessages(req.Context(), msg); err != nil {
+	if err := s.Client.WriteMessages(req.Context(), msg); err != nil {
 		log.Fatalln("error when WriteMessages : ", err)
 	}
 }

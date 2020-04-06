@@ -8,8 +8,9 @@ import (
 	"github.com/jboulet/fizzbuzz-go/app"
 	"github.com/jboulet/fizzbuzz-go/config"
 	"github.com/jboulet/fizzbuzz-go/db"
+	"github.com/jboulet/fizzbuzz-go/service"
 	"github.com/kelseyhightower/envconfig"
-	kafka "github.com/segmentio/kafka-go"
+	"github.com/segmentio/kafka-go"
 	"log"
 	"net/http"
 )
@@ -39,25 +40,28 @@ func main() {
 	}
 	defer database.Close()
 
-	kafkaWriter := kafka.NewWriter(kafka.WriterConfig{
-		Brokers:  []string{s.BS_SERVER},
-		Topic:    s.TOPIC,
-		Balancer: &kafka.LeastBytes{},
-	})
-	defer kafkaWriter.Close()
-
-	redisClient := redis.NewClient(&redis.Options{
-		Addr:     s.REDIS_HOST,
-		Password: s.REDIS_PASSWORD, // no password set
-		DB:       s.REDIS_DB,       // use default DB
-	})
-
 	app := &app.App{
 		Router:   mux.NewRouter().StrictSlash(true),
 		Decoder:  schema.NewDecoder(),
 		Database: database,
-		Producer: kafkaWriter,
-		Redis:    redisClient,
+	}
+
+	if s.IS_KAFKA {
+		client := kafka.NewWriter(kafka.WriterConfig{
+			Brokers:  []string{s.BS_SERVER},
+			Topic:    s.TOPIC,
+			Balancer: &kafka.LeastBytes{},
+		})
+		app.Service = &service.SaveKafkaService{Client: client}
+		defer client.Close()
+	} else {
+		client := redis.NewClient(&redis.Options{
+			Addr:     s.REDIS_HOST,
+			Password: s.REDIS_PASSWORD, // no password set
+			DB:       s.REDIS_DB,       // use default DB
+		})
+		app.Service = &service.SaveRedisService{Client: client}
+		defer client.Close()
 	}
 
 	app.SetupRouter()

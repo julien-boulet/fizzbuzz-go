@@ -10,7 +10,7 @@ services:
     environment:
       POSTGRES_PASSWORD: postgres
 
-  Redis:
+  redis:
     image: redis
     ports:
       - "6379:6379"
@@ -28,10 +28,15 @@ services:
       DB_NAME: postgres
       BS_SERVER: kafka-1:29092
       TOPIC: topic
+      REDIS_HOST: redis:6379
+      REDIS_PASSWORD: ""
+      REDIS_DB: 0
+      IS_KAFKA: "false"
     ports:
       - "8083:8080"
     depends_on:
       - postgres
+      - redis
       - zookeeper
       - kafka-1
       - kafka-2

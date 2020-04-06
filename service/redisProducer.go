@@ -9,7 +9,11 @@ import (
 	"net/http"
 )
 
-func PushtoRedis(client *redis2.Client, gameParameter *dto.GameParameter, req *http.Request) {
+type SaveRedisService struct {
+	Client *redis2.Client
+}
+
+func (s *SaveRedisService) Push(gameParameter *dto.GameParameter, req *http.Request) {
 
 	gameParameterJson, err := json.Marshal(gameParameter)
 	if err != nil {
@@ -17,7 +21,7 @@ func PushtoRedis(client *redis2.Client, gameParameter *dto.GameParameter, req *h
 		log.Fatal("Error convert gameParameter to json : ", err)
 	}
 
-	err = client.Set(fmt.Sprintf("address-%s", req.RemoteAddr), gameParameterJson, 0).Err()
+	err = s.Client.Set(fmt.Sprintf("address-%s", req.RemoteAddr), gameParameterJson, 0).Err()
 	if err != nil {
 		log.Fatalln("error when WriteMessages : ", err)
 	}

@@ -4,24 +4,25 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	redis2 "github.com/go-redis/redis/v7"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/schema"
 	_ "github.com/jboulet/fizzbuzz-go/docs"
 	"github.com/jboulet/fizzbuzz-go/dto"
 	"github.com/jboulet/fizzbuzz-go/service"
-	kafka "github.com/segmentio/kafka-go"
 	"github.com/swaggo/http-swagger"
 	"log"
 	"net/http"
 )
 
+type SaveService interface {
+	Push(gameParameter *dto.GameParameter, req *http.Request)
+}
+
 type App struct {
 	Router   *mux.Router
 	Decoder  *schema.Decoder
 	Database *sql.DB
-	Producer *kafka.Writer
-	Redis    *redis2.Client
+	Service  SaveService
 }
 
 func (app *App) SetupRouter() {
@@ -71,8 +72,7 @@ func (app *App) playFizzBuzz(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, value)
 	}
 	service.Save(app.Database, &gameParameter)
-	service.PushtoKafka(app.Producer, &gameParameter, r)
-	service.PushtoRedis(app.Redis, &gameParameter, r)
+	app.Service.Push(&gameParameter, r)
 }
 
 // @Summary ask the best statistics

@@ -12,6 +12,7 @@ type Specification struct {
 	REDIS_HOST     string `default:"localhost:6379"`
 	REDIS_PASSWORD string `default:""`
 	REDIS_DB       int    `default:0`
+	IS_KAFKA       bool   `default:"false"`
 }
 
 var s Specification
