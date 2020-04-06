@@ -57,8 +57,8 @@ func main() {
 	} else {
 		client := redis.NewClient(&redis.Options{
 			Addr:     s.REDIS_HOST,
-			Password: s.REDIS_PASSWORD, // no password set
-			DB:       s.REDIS_DB,       // use default DB
+			Password: s.REDIS_PASSWORD,
+			DB:       s.REDIS_DB,
 		})
 		app.Service = &service.SaveRedisService{Client: client}
 		defer client.Close()
